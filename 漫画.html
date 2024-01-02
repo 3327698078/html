@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta chapset="utf-8">
+		<title>原神</title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				list-style: none;
+				box-sizing: border-box;
+			}
+			
+			/* 全局盒子 */
+			.content-warp {
+				margin: 0;
+				padding: 0;
+				top: 0;
+				height: 100%;
+				width: 100%;
+				border: 1px solid black;
+				position: relative;
+			}
+			
+			/* 添加导航栏样式 */
+			nav {
+				display: flex;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 66px;
+				transition: background-color 0.5s; /* 添加过渡效果 */
+				z-index: 3; /* 设置一个较高的 z-index 以确保导航栏在顶部 */
+				color: white;
+				text-align: center;
+				line-height: 66px;
+				background: #111111BF;
+				margin: 0 auto;
+				
+			}
+			
+			nav ul {
+				list-style: none;
+				display: flex;
+				align-items: center; /* 垂直居中 */
+				margin-left: 30px;
+			}
+			
+			nav li {
+				float: left;
+				height: 66px;
+				width: 66px;
+				text-align: center;
+				margin: 0px 50px;
+			}
+			
+			nav a {
+				text-align: center;
+				color:#fff;
+				font-size: 18px;
+				text-decoration: none; /* 去除下划线 */
+				letter-spacing: 5px; /* 增加字间距 */
+			}
+			
+			nav li:hover {
+				color: #fff;
+				text-shadow: 0 0 10px #69e0ff, 0 0 20px #69e0ff, 0 0 40px #69e0ff;
+			}
+			
+			/* logo顶部左侧 */
+			.logo {
+				float: left;
+				margin-left: 80px;
+				height: 100%;
+				width: 85px;
+				background: transparent url("./原神素材/原神左侧图标.png") no-repeat 0 0;
+				cursor: pointer;
+				background-size: contain;
+				transform: scale(2);
+			}
+			
+			/* 导航样式结束 */
+			/* 导航右侧图标 */
+			.music{
+				transform: translateX(0px);
+				position: fixed;
+				top: 15px;
+				right: 80px;
+				z-index: 9999;
+				cursor: pointer;
+			}
+			/* 漫画开始 */
+			.manga{
+				position: relative;
+				width: 100%;
+				background-position-y: 0px;
+			}
+			.manga-banner{
+				position: relative;
+				display: flex;
+				color: #333;
+				justify-content: left;
+				align-items: center;
+				width: 100%;
+				background: transparent url(./原神素材/漫画素材/温迪背景.jpg);
+				background-size: 100% 100%;
+				padding-bottom: 10px;
+			}
+			.manga .manga-banner::before{
+				padding-top: 33.35%;
+				content: "";
+				display: block;
+				margin: 0 166px;
+			}
+			.manga .manga-inner{
+				width: 1280px;
+				padding-left: 10px;
+				box-sizing: border-box;
+			}
+			.manga-inner::after{
+				padding-top: 33.35%;
+				content: "";
+				display: block;
+				margin: 0 166px;
+			}
+			.banner-inner{       /* 内部内容 */
+				width: 1280px;
+				padding-left: 10px;
+				box-sizing: border-box;
+			}
+			.banner-title{
+				font-size: 36px;
+				height: 44px;
+				line-height: 44px;
+				margin-top: 66px;
+				margin-bottom: 10px;
+				text-shadow: 0 2px 6px rgba(0,0,0,0.1);
+			}
+			.banner-desc{
+				width: 600px;
+				height: auto;
+				font-size: 16px;
+				margin-bottom: 24px;
+			}
+			.banner-desc p{
+				line-height: 24px;
+				font-weight: 600;
+			}
+			.banner-operation{
+				position: relative;
+				width: 100%;
+				height: 36px;
+			}
+			.banner-popover{
+				position: relative;
+				float: left;
+				margin-right: 17px;
+			}
+			.xkj{
+				margin-right: 10px;
+				background-color: #00c0ff;
+				display: inline-block;
+				padding: 0 10px;
+				font-size: 16px;
+				min-width: 175px;
+				height: 36px;
+				text-align: center;
+				border-radius: 4px;
+				opacity: 0.75;
+				cursor: pointer;
+				color: #fff;
+				text-decoration: none;
+				line-height: 36px;
+			}
+			.banner-begin{
+			    display: inline-block;
+			    padding: 0 10px;
+			    font-size: 16px;
+			    min-width: 175px;
+			    height: 36px;
+			    line-height: 36px;
+			    text-align: center;
+			    border-radius: 4px;
+			    opacity: 0.75;
+			    cursor: pointer;
+			    color: #fff;
+			    background-color: #111;
+			    text-decoration: none;
+			    box-sizing: border-box;
+			}
+			.banner-lastip{
+				opacity: 0;
+				z-index: 1;
+				position: absolute;
+				top: 48px;
+				left: 50%;
+				margin-left: -78px;
+				width: 155px;
+				height: 116px;
+				background-color: #fff;
+				text-align: center;
+				font-size: 14px;
+				transition: opacity 0.5s 0s ease;
+			}
+			.banner-lastip p{
+				height: 32px;
+				line-height: 32px;
+			}
+			.banner-lastip img{
+				width: 126px;
+				height: 72px;
+			}
+			.banner-lastip::before{
+				content: "";
+				position: absolute;
+				left: 50%;
+				top: -6px;
+				margin-left: -6px;
+				width: 12px;
+				height: 12px;
+				background-color: #fff;
+				transform: rotate(45deg);
+			}
+			.chapters{    /* 漫画下面大框架 */
+				width: 100%;
+				padding-top: 45px;
+				background: transparent url(./原神素材/漫画素材/模糊背景.jpg);
+				background-size: cover;
+				margin: 0 auto;
+			}
+			.chapters-list{
+				position: relative;
+			    left: 50%;
+			    margin-left: -658px;
+			    width: 1396px;
+			    list-style-type: none;
+			}
+			.chapters-item{
+				cursor: pointer;
+				display: inline-block;
+			    vertical-align: top;
+			    position: relative;
+			    width: 306px;
+			    height: 172px;
+			    margin-left: 18px;
+			    margin-bottom: 23px;
+			    background-color: #111;
+			    border-radius: 4px;
+			    border: 1px solid rgba(255,255,255,0.1);
+			    overflow: hidden;
+			}
+			.chapters-item a{
+				display: inline-block;
+				width: 100%;
+				height: 100%;
+			}
+			.chapters-cover{
+				opacity: 0.75;
+				transition: all 0.5s 0s ease;
+			    width: 100%;
+			    height: 100%;
+			    opacity: 1;
+			    -o-object-fit: cover;
+			    object-fit: cover;
+			}
+			.chapters-number{
+				width: 100%;
+			    position: absolute;
+			    background-color: #111;
+			    bottom: 0;
+			    height: 36px;
+			    line-height: 36px;
+			    opacity: 0.75;
+			    text-align: center;
+			    font-size: 20px;
+			    color: #fff;
+			}
+			/* 底部文字logo */
+			.footerCon {
+			    padding: 30px 0;
+			    background: #000;
+			    color: #999;
+			    font-size: 24px;
+			    padding-bottom: 20px;
+			    overflow: auto;
+			    width: 100%;
+			    height: 150px;
+			    background-size: cover;
+			    background-repeat: no-repeat;
+			    background-color: #000;
+				background-image: url(./原神素材/footer素材/foter背景.png);
+			}
+			
+			.footerCon-content {
+			    display: flex;
+			    width: 70%;
+			    margin: 0 auto;
+			    text-align: center;
+			    align-items: center;
+			    margin-top: 45px;
+			}
+			
+			.footer-logo {
+			    flex-direction: column;
+			    justify-content: center;
+			    display: flex;
+			    align-items: center;
+			    box-sizing: border-box;
+			    margin-left: 60px;
+			}
+			
+			.footer-info {
+			    color: #aaa;
+			    flex: 1; /* 设置弹性元素，使其占据剩余空间 */
+			    line-height: 28px;
+			    text-align: center;
+			}
+			
+			.footer-mg1 {
+			    box-sizing: border-box;
+			    margin: 0;
+			    padding: 0;
+			    text-align: center;
+			}
+			
+			.footer-p {
+			    color: #3299CC ;
+			    font-family: 楷体;
+				font-weight: bold;
+			    margin-bottom: 10px; /* 添加底部边距 */
+				margin-right: 240px;
+			}
+		</style>
+	</head>
+	<body style="margin: 0; padding: 0;">
+		<div class="content-warp">
+			<nav>
+				<div class="logo"></div>
+				<ul style="list-style: none;">
+					<li><a href="./index.html" target="_self">首页</a></li>
+					<li><a href="./琴.html" target="_self">角色</a></li>
+					<li><a href="./世界.html" target="_self">世界</a></li>
+					<li><a href="./漫画.html" target="_self">漫画</a></li>
+					<li><a href="./图像.html" target="_self">图像</a></li>
+					<li><a href="https://act.mihoyo.com/ys/event/community-content-collection/index.html?game_biz=hk4e_cn&mhy_presentation_style=fullscreen&mhy_auth_required=true&mhy_hide_status_bar=true&utm_source=gw&utm_medium=ys&utm_campaign=sns#/home" target="_blank">社区</a></li>
+				</ul>
+			<!-- 背景音乐 -->
+			<div class="music" id="musicIcon" onclick="toggleMusic()">
+			    <!-- 初始状态为暂停图标 -->
+			    <img src="./原神素材/首页素材/音乐暂停图标.png">
+			</div>
+			
+			<audio id="bgMusic1" loop>
+			    <source src="./原神素材/首页素材/背景音乐.mp3" type="audio/mp3">
+			    你的设备不支持播放音乐
+			</audio>
+			
+			<audio id="bgMusic2" loop>
+			    <source src="./原神素材/首页素材/风和海浪.mp3" type="audio/mp3">
+			    你的设备不支持播放音乐
+			</audio>
+			
+			<script>
+			    var bgMusic1 = document.getElementById('bgMusic1');
+			    var bgMusic2 = document.getElementById('bgMusic2');
+			    var musicIcon = document.getElementById('musicIcon');
+			    var isMusicPlaying = !bgMusic1.paused;  // 初始状态为音乐是否正在播放
+			
+			    // 初始状态，设置图标
+			    if (isMusicPlaying) {
+			        musicIcon.innerHTML = '<img src="./原神素材/首页素材/音乐图标.png">';
+			    }
+			
+			    function toggleMusic() {
+			        if (isMusicPlaying) {
+			            // 如果音乐正在播放，则暂停
+			            bgMusic1.pause();
+			            bgMusic2.pause();
+			            // 切换图标（比如切换成暂停图标）
+			            musicIcon.innerHTML = '<img src="./原神素材/首页素材/音乐暂停图标.png">';
+			        } else {
+			            // 如果音乐暂停，则播放
+			            bgMusic1.play();
+			            bgMusic2.play();
+			            // 切换图标（比如切换成播放图标）
+			            musicIcon.innerHTML = '<img src="./原神素材/首页素材/音乐图标.png">';
+			        }
+			        // 切换音乐播放状态
+			        isMusicPlaying = !isMusicPlaying;
+			    }
+			</script>
+			</nav>
+			<div class="manga">
+				<div class="manga-banner">
+					<div class="banner-inner">
+						<div class="banner-title">漫画</div>
+						<div class="banner-desc">
+							<p>这里是七种元素神灵信仰交汇的幻想世界提瓦特。</p>
+							<p>席卷大陆的灾难终于停息，疮痍逐渐被抚平——本应到来的安宁却并没有如期光临风之城「蒙德」。</p>
+							<p>飞扬跋扈的组织「愚人众」借着保护的名义欺压诸国，而来自历史之暗的不祥也在等待着复仇的机会……</p>
+						</div>
+						<div class="banner-operation">
+							<div class="banner-popover">
+								<a href="https://ys.mihoyo.com/main/manga/detail/191?mute=1" class="xkj" target="_blank">继续阅读</a>
+								<a href="https://ys.mihoyo.com/main/manga/detail/191?mute=1" class="banner-begin" target="_blank">重新开始</a>
+							</div>
+							<div class="banner-lastip">
+								<p>第一话 添酒</p>
+								<img src="./原神素材/漫画素材/第一话.jpg">
+							</div>
+						</div>
+					</div>
+					
+				</div>
+				<div class="chapters">
+					<ul id="chaptersList" class="chapters-list">
+						<li class="chapters-item">
+							<a href="https://ys.mihoyo.com/main/manga/detail/191?mute=1" target="_blank">
+								<img src="原神素材/漫画素材/第一话.jpg" class="chapters-cover">
+								<div class="chapters-number">第一话 添酒</div>
+							</a>
+						</li>
+						<li class="chapters-item">
+							<a href="https://ys.mihoyo.com/main/manga/detail/192?mute=1" target="_blank">
+								<img src="原神素材/漫画素材/第二话.jpg" class="chapters-cover">
+								<div class="chapters-number">第二话 炎生</div>
+							</a>
+						</li>
+						<li class="chapters-item">
+							<a href="https://ys.mihoyo.com/main/manga/detail/198?mute=1" target="_blank">
+								<img src="原神素材/漫画素材/第三话.jpg" class="chapters-cover">
+								<div class="chapters-number">第三话 失物</div>
+							</a>
+						</li>
+						<li class="chapters-item">
+							<a href="https://ys.mihoyo.com/main/manga/detail/429?mute=1" target="_blank">
+								<img src="原神素材/漫画素材/第四话.jpg" class="chapters-cover">
+								<div class="chapters-number">第四话 变动</div>
+							</a>
+						</li>
+						<li class="chapters-item">
+							<a href="https://ys.mihoyo.com/main/manga/detail/438?mute=1" target="_blank">
+								<img src="原神素材/漫画素材/第五话.jpg" class="chapters-cover">
+								<div class="chapters-number">第五话 险地</div>
+							</a>
+						</li>
+						<li class="chapters-item">
+							<a href="https://ys.mihoyo.com/main/manga/detail/443?mute=1" target="_blank">
+								<img src="原神素材/漫画素材/第六话.jpg" class="chapters-cover">
+								<div class="chapters-number">第六话 风炎</div>
+							</a>
+						</li>
+						<li class="chapters-item">
+							<a href="https://ys.mihoyo.com/main/manga/detail/482?mute=1" target="_blank">
+								<img src="原神素材/漫画素材/第七话.jpg" class="chapters-cover">
+								<div class="chapters-number">第七话 尘匣</div>
+							</a>
+						</li>
+						<li class="chapters-item">
+							<a href="https://ys.mihoyo.com/main/manga/detail/810?mute=1" target="_blank">
+								<img src="原神素材/漫画素材/第八话.jpg" class="chapters-cover">
+								<div class="chapters-number">第八话 线索</div>
+							</a>
+						</li><li class="chapters-item">
+							<a href="https://ys.mihoyo.com/main/manga/detail/917?mute=1" target="_blank">
+								<img src="原神素材/漫画素材/第九话.jpg" class="chapters-cover">
+								<div class="chapters-number">第九话 游宴</div>
+							</a>
+						</li>
+						<li class="chapters-item">
+							<a href="https://ys.mihoyo.com/main/manga/detail/987?mute=1" target="_blank">
+								<img src="原神素材/漫画素材/第十话.jpg" class="chapters-cover">
+								<div class="chapters-number">第十话 愚戏</div>
+							</a>
+						</li>
+						<li class="chapters-item">
+							<a href="https://ys.mihoyo.com/main/manga/detail/1073?mute=1" target="_blank">
+								<img src="原神素材/漫画素材/第十一话.jpg" class="chapters-cover">
+								<div class="chapters-number">第十一话 蛇音</div>
+							</a>
+						</li>
+						<li class="chapters-item">
+							<a href="https://ys.mihoyo.com/main/manga/detail/3476?mute=1" target="_blank">
+								<img src="原神素材/漫画素材/第十二话.jpg" class="chapters-cover">
+								<div class="chapters-number">第十二话 心雾</div>
+							</a>
+						</li>
+						<li class="chapters-item">
+							<a href="https://ys.mihoyo.com/main/manga/detail/3756?mute=1" target="_blank">
+								<img src="原神素材/漫画素材/第十三话.jpg" class="chapters-cover">
+								<div class="chapters-number">第十三话 再临</div>
+							</a>
+						</li>
+						<li class="chapters-item">
+							<a href="https://ys.mihoyo.com/main/manga/detail/6144?mute=1" target="_blank">
+								<img src="原神素材/漫画素材/第十四话.jpg" class="chapters-cover">
+								<div class="chapters-number">第十四话 顽疾</div>
+							</a>
+						</li>
+						<li class="chapters-item">
+							<a href="https://ys.mihoyo.com/main/manga/detail/6477?mute=1" target="_blank">
+								<img src="原神素材/漫画素材/第十五话.jpg" class="chapters-cover">
+								<div class="chapters-number">第十五话 落地</div>
+							</a>
+						</li>
+						<li class="chapters-item">
+							<a href="https://ys.mihoyo.com/main/manga/detail/6530?mute=1" target="_blank">
+								<img src="原神素材/漫画素材/第十六话.jpg" class="chapters-cover">
+								<div class="chapters-number">第十六话 添酒</div>
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+        </div>
+		
+    </body>
+</html>

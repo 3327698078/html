@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>原神</title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+			
+			/* 全局盒子 */
+			.content-warp {
+				margin: 0;
+				padding: 0;
+				top: 0;
+				height: 100%;
+				width: 100%;
+				border: 1px solid black;
+				position: relative;
+			}
+			
+			/* 添加导航栏样式 */
+			nav {
+				display: flex;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 66px;
+				transition: background-color 0.5s; /* 添加过渡效果 */
+				z-index: 3; /* 设置一个较高的 z-index 以确保导航栏在顶部 */
+				color: white;
+				text-align: center;
+				line-height: 66px;
+				background: #111111BF;
+				margin: 0 auto;
+				
+			}
+			
+			nav ul {
+				list-style: none;
+				display: flex;
+				align-items: center; /* 垂直居中 */
+				margin-left: 30px;
+			}
+			
+			nav li {
+				float: left;
+				height: 66px;
+				width: 66px;
+				text-align: center;
+				margin: 0px 50px;
+			}
+			
+			nav a {
+				text-align: center;
+				color:#fff;
+				font-size: 18px;
+				text-decoration: none; /* 去除下划线 */
+				letter-spacing: 5px; /* 增加字间距 */
+			}
+			
+			nav li:hover {
+				color: #fff;
+				text-shadow: 0 0 10px #69e0ff, 0 0 20px #69e0ff, 0 0 40px #69e0ff;
+			}
+			
+			/* logo顶部左侧 */
+			.logo {
+				float: left;
+				margin-left: 80px;
+				height: 100%;
+				width: 85px;
+				background: transparent url("./原神素材/原神左侧图标.png") no-repeat 0 0;
+				cursor: pointer;
+				background-size: contain;
+				transform: scale(2);
+			}
+			/* 导航右侧图标 */
+			.music{
+				transform: translateX(0px);
+				position: fixed;
+				top: 15px;
+				right: 80px;
+				z-index: 9999;
+				cursor: pointer;
+			}
+			/* 导航样式结束 */
+			/* 游记主体开始 */
+			.yj-warp{
+				position: relative;
+				width: 100%;
+				height: 100vh;
+				min-height: 900px;
+				overflow: hidden;
+				font-size: 12px;
+				background-image: url(./原神素材/游记素材/游记背景.jpg);
+				background-position: center top;
+				background-size: cover;
+			}
+			.yj-warp::before{
+				position: absolute;
+			    z-index: 2;
+			    top: 445px;
+			    left: 0;
+			    display: block;
+			    content: '';
+			    width: 100%;
+			    height: 49%;
+			    max-height: 499px;
+			    background-image: url(./原神素材/游记素材/游记模糊图.png);
+			    background-position: center;
+			    background-repeat: repeat-x;
+			    background-size: auto 100%;
+			}
+			.town{
+			    position: relative;
+			    z-index: 2;
+			    width: 1280px;
+			    height: 100%;
+			    margin: 0 auto;
+			}
+			.town-desc{
+			    width: 600px;
+			    height: 335px;
+			    margin-top: 129px;
+			    margin-left: 110px;
+			    color: #fff;
+			    text-shadow: 0 4px 4px rgba(0,0,0,0.3);
+			}
+			.town-desc h2{
+				width: 100%;
+			    height: 90px;
+			    line-height: 90px;
+			    font-size: 48px;
+			    font-weight: 400;
+			    padding-left: 90px;
+			    box-sizing: border-box;
+			    background: left center no-repeat;
+			    background-size: 80px 80px;
+				background-image: url(./原神素材/游记素材/游记图标.png);
+			    margin-bottom: 25px;
+			}
+			.town-desc p{
+				width: 100%;
+				font-size: 16px;
+				line-height: 25px;
+			}
+			.town-note{
+				position: relative;
+			    display: flex;
+			    
+			    width: 100%;
+			}
+			.town-swiper{
+				width: 1054px;
+				height: 100%;
+				margin-left: 110px;
+			    margin-right: auto;
+			    position: relative;
+			    overflow: hidden;
+			    list-style: none;
+			    padding: 0;
+			    z-index: 1;
+			}
+			.swiper-wrapper{
+				transition-duration: 0ms;
+				transform: translate3d(0px, 0px, 0px);
+			    width: 100%;
+			    align-items: center;
+				position: relative;
+				height: 100%;
+				z-index: 1;
+				display: flex;
+			}
+			.swiper-slide{
+				width: 340px;
+				margin-right: 17px;
+				font-size: 0;
+				position: relative;
+				padding-top: 69px;
+			}
+			.town-swiper li::before{
+			    position: absolute;
+			    z-index: 2;
+			    top: 52px;
+			    left: 50%;
+			    display: block;
+			    content: '';
+			    width: 31px;
+			    height: 38px;
+				background-image: url(./原神素材/游记素材/游记图标2.png);
+			    background-position: center;
+			    background-repeat: no-repeat;
+			    background-size: cover;
+			    transform: translateX(-50%);
+			}
+			.town-city{
+				display: inline-block;
+				border: 2px solid #fff;
+				position: relative;
+			    width: 100%;
+			    height: 210px;
+			    box-sizing: border-box;
+			    overflow: hidden;
+			    background-image: url(./原神素材/游记素材/游记图标3.png);
+			    background-position: center;
+			    background-repeat: no-repeat;
+			    background-size: cover;
+			    font-size: 18px;
+			    line-height: 210px;
+			    color: #704c21;
+			    text-align: center;
+			}
+			.town-city img{
+			    display: block;
+			    width: 100%;
+			    height: 100%;
+			    transform: scale(1);
+			    transition: all 0.5s 0s ease;
+			}
+			.swiper-slide p{
+			    width: 276px;
+			    height: 40px;
+			    font-size: 18px;
+			    line-height: 40px;
+			    color: #f4d8a8;
+			    text-align: center;
+			    margin: 20px auto 0;
+				background-image: url(./原神素材/游记素材/游记图标4.png);
+			    background-position: center;
+			    background-repeat: no-repeat;
+			    background-size: cover;
+			}
+			.swiper-slide li::before{
+			    position: absolute;
+			    z-index: 2;
+			    top: 52px;
+			    left: 50%;
+			    display: block;
+			    content: '';
+			    width: 31px;
+			    height: 38px;
+				background-image: url(./原神素材/游记素材/游记图标2.1.png);
+			    background-position: center;
+			    background-repeat: no-repeat;
+			    background-size: cover;
+			    transform: translateX(-50%);
+			}
+			/* 底部文字logo */
+			.footerCon {
+			    padding: 30px 0;
+			    background: #000;
+			    color: #999;
+			    font-size: 24px;
+			    padding-bottom: 20px;
+			    overflow: auto;
+			    width: 100%;
+			    height: 150px;
+			    background-size: cover;
+			    background-repeat: no-repeat;
+			    background-color: #000;
+				background-image: url(./原神素材/footer素材/foter背景.png);
+			}
+			
+			.footerCon-content {
+			    display: flex;
+			    width: 70%;
+			    margin: 0 auto;
+			    text-align: center;
+			    align-items: center;
+			    margin-top: 45px;
+			}
+			
+			.footer-logo {
+			    flex-direction: column;
+			    justify-content: center;
+			    display: flex;
+			    align-items: center;
+			    box-sizing: border-box;
+			    margin-left: 60px;
+			}
+			
+			.footer-info {
+			    color: #aaa;
+			    flex: 1; /* 设置弹性元素，使其占据剩余空间 */
+			    line-height: 28px;
+			    text-align: center;
+			}
+			
+			.footer-mg1 {
+			    box-sizing: border-box;
+			    margin: 0;
+			    padding: 0;
+			    text-align: center;
+			}
+			
+			.footer-p {
+			    color: #3299CC ;
+			    font-family: 楷体;
+				font-weight: bold;
+			    margin-bottom: 10px; /* 添加底部边距 */
+				margin-right: 240px;
+			}
+		</style>
+	</head>
+	<body style="margin: 0; padding: 0;">
+		<div class="content-warp">
+			<nav>
+				<div class="logo"></div>
+				<ul style="list-style: none;">
+					<li><a href="./index.html" target="_self">首页</a></li>
+					<li><a href="./琴.html" target="_self">角色</a></li>
+					<li><a href="./世界.html" target="_self">世界</a></li>
+					<li><a href="./漫画.html">漫画</a></li>
+					<li><a href="./图像.html" target="_self">图像</a></li>
+					<li><a href="https://act.mihoyo.com/ys/event/community-content-collection/index.html?game_biz=hk4e_cn&mhy_presentation_style=fullscreen&mhy_auth_required=true&mhy_hide_status_bar=true&utm_source=gw&utm_medium=ys&utm_campaign=sns#/home" target="_blank">社区</a></li>
+				</ul>
+			<!-- 背景音乐 -->
+			<div class="music" id="musicIcon" onclick="toggleMusic()">
+			    <!-- 初始状态为暂停图标 -->
+			    <img src="./原神素材/首页素材/音乐暂停图标.png">
+			</div>
+			
+			<audio id="bgMusic1" loop>
+			    <source src="./原神素材/首页素材/背景音乐.mp3" type="audio/mp3">
+			    你的设备不支持播放音乐
+			</audio>
+			
+			<audio id="bgMusic2" loop>
+			    <source src="./原神素材/首页素材/风和海浪.mp3" type="audio/mp3">
+			    你的设备不支持播放音乐
+			</audio>
+			
+			<script>
+			    var bgMusic1 = document.getElementById('bgMusic1');
+			    var bgMusic2 = document.getElementById('bgMusic2');
+			    var musicIcon = document.getElementById('musicIcon');
+			    var isMusicPlaying = !bgMusic1.paused;  // 初始状态为音乐是否正在播放
+			
+			    // 初始状态，设置图标
+			    if (isMusicPlaying) {
+			        musicIcon.innerHTML = '<img src="./原神素材/首页素材/音乐图标.png">';
+			    }
+			
+			    function toggleMusic() {
+			        if (isMusicPlaying) {
+			            // 如果音乐正在播放，则暂停
+			            bgMusic1.pause();
+			            bgMusic2.pause();
+			            // 切换图标（比如切换成暂停图标）
+			            musicIcon.innerHTML = '<img src="./原神素材/首页素材/音乐暂停图标.png">';
+			        } else {
+			            // 如果音乐暂停，则播放
+			            bgMusic1.play();
+			            bgMusic2.play();
+			            // 切换图标（比如切换成播放图标）
+			            musicIcon.innerHTML = '<img src="./原神素材/首页素材/音乐图标.png">';
+			        }
+			        // 切换音乐播放状态
+			        isMusicPlaying = !isMusicPlaying;
+			    }
+			</script>
+        </div>
+		<!-- 内容 -->
+		<div class="yj-warp" style="background-position-y: 0px;">
+			<div class="town">
+				<div class="town-desc">
+					<h2>提瓦特大陆游记精选</h2>
+					<p>这里刊登了由冒险家协会提供的提瓦特大陆游记精选。</p>
+					<p>我们根据提瓦特近期的热门旅行目的地，甄选出一系列作品，为各位旅行者提供全面的旅行规划参考。</p>
+					<p>至于没有出行计划的提瓦特居民们，就把它当作您下午茶时间的闲暇读物吧！</p>
+				</div>
+				<div class="town-note">
+					<div class="town-swiper">
+						<ul class="swiper-wrapper"style="transition-duration: 0ms; transform: translate3d(0,0,0);">
+							<a href="https://ys.mihoyo.com/main/town/mondstadt?mute=1&noteId=1165" target="_blank">
+								<li class="swiper-slide" style="width: 340px; margin-right: 17px;">
+									<div class="town-city">
+										<img src="./原神素材/游记素材/蒙德游记.png">
+									</div>
+									<p>蒙德城</p>
+								</li>
+							</a>
+								<li class="swiper-slide" style="width: 340px; margin-right: 17px;">
+							<a href="https://ys.mihoyo.com/main/town/mondstadt?mute=1&noteId=1165" target="_blank">
+									<div class="town-city">
+										<img src="./原神素材/游记素材/璃月游记.png">
+									</div>
+									<p>璃月港</p>
+								</li>
+							</a>
+								<li class="swiper-slide" style="width: 340px; margin-right: 17px;">
+							<a href="https://ys.mihoyo.com/main/town/mondstadt?mute=1&noteId=1165" target="_blank">
+									<div class="town-city">
+										<img src="./原神素材/游记素材/稻妻游记.png">
+									</div>
+									<p>稻妻城</p>
+								</li>
+							</a>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+    </body>
+</html>

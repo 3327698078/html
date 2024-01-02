@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wallpapers</title>
+    <style>
+		/* 添加导航栏样式 */
+		* {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+		nav {
+			display: flex;
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 66px;
+			transition: background-color 0.5s; /* 添加过渡效果 */
+			z-index: 3; /* 设置一个较高的 z-index 以确保导航栏在顶部 */
+			color: white;
+			text-align: center;
+			line-height: 66px;
+			background: #111111BF;
+			margin: 0 auto;
+		}
+		
+		nav ul {
+			list-style: none;
+			display: flex;
+			align-items: center; /* 垂直居中 */
+			margin-left: 30px;
+		}
+		
+		nav li {
+			float: left;
+			height: 66px;
+			width: 66px;
+			text-align: center;
+			margin: 0px 50px;
+		}
+		
+		nav a {
+			text-align: center;
+			color:#fff;
+			font-size: 18px;
+			text-decoration: none; /* 去除下划线 */
+			letter-spacing: 5px; /* 增加字间距 */
+		}
+		
+		nav li:hover {
+			color: #fff;
+			text-shadow: 0 0 10px #69e0ff, 0 0 20px #69e0ff, 0 0 40px #69e0ff;
+		}
+		
+		/* logo顶部左侧 */
+		.logo {
+			float: left;
+			margin-left: 80px;
+			height: 100%;
+			width: 85px;
+			background: transparent url("./原神素材/原神左侧图标.png") no-repeat 0 0;
+			cursor: pointer;
+			background-size: contain;
+			transform: scale(2);
+		}
+		/* 导航右侧图标 */
+		.music{
+			transform: translateX(0px);
+			position: fixed;
+			top: 15px;
+			right: 80px;
+			z-index: 9999;
+			cursor: pointer;
+		}
+		/* 导航样式结束 */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+			background-image: url(./原神素材/图像素材/壁纸背景6.png) ;
+			background-repeat: no-repeat;
+			width: 100%;
+			background-position: center center;
+			background-attachment: fixed;
+			background-size: cover;	
+			height: 2560px;
+        }
+
+        main {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+        }
+
+        .wallpaper {
+            margin: 10px;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+			height: 450px;
+			width: 800px;
+        }
+
+        .wallpaper:hover {
+            transform: scale(1.1);
+        }
+
+        .wallpaper img {
+			padding-top: 50px;
+            width: 100%;
+            height: 450px;
+            border-radius: 8px;
+			background-size: cover;
+			opacity: 0.9;
+        }
+
+        /* 底部栏 */
+		
+    </style>
+</head>
+<body>
+    <div class="content-warp">
+		<header>
+		    
+		</header>
+    	<nav>
+    		<div class="logo"></div>
+    		<ul style="list-style: none;">
+    			<li><a href="./index.html" target="_self">首页</a></li>
+    			<li><a href="./琴.html" target="_self">角色</a></li>
+    			<li><a href="./世界.html" target="_self">世界</a></li>
+    			<li><a href="./漫画.html">漫画</a></li>
+    			<li><a href="#" target="_self">图像</a></li>
+    			<li><a href="https://act.mihoyo.com/ys/event/community-content-collection/index.html?game_biz=hk4e_cn&mhy_presentation_style=fullscreen&mhy_auth_required=true&mhy_hide_status_bar=true&utm_source=gw&utm_medium=ys&utm_campaign=sns#/home" target="_blank">社区</a></li>
+    		</ul>
+    		<!-- 背景音乐 -->
+    		<div class="music" id="musicIcon" onclick="toggleMusic()">
+    		    <!-- 初始状态为暂停图标 -->
+    		    <img src="./原神素材/首页素材/音乐暂停图标.png">
+    		</div>
+    		
+    		<audio id="bgMusic1" loop>
+    		    <source src="./原神素材/首页素材/背景音乐.mp3" type="audio/mp3">
+    		    你的设备不支持播放音乐
+    		</audio>
+    		
+    		<audio id="bgMusic2" loop>
+    		    <source src="./原神素材/首页素材/风和海浪.mp3" type="audio/mp3">
+    		    你的设备不支持播放音乐
+    		</audio>
+    		
+    		<script>
+    		    var bgMusic1 = document.getElementById('bgMusic1');
+    		    var bgMusic2 = document.getElementById('bgMusic2');
+    		    var musicIcon = document.getElementById('musicIcon');
+    		    var isMusicPlaying = !bgMusic1.paused;  // 初始状态为音乐是否正在播放
+    		
+    		    // 初始状态，设置图标
+    		    if (isMusicPlaying) {
+    		        musicIcon.innerHTML = '<img src="./原神素材/首页素材/音乐图标.png">';
+    		    }
+    		
+    		    function toggleMusic() {
+    		        if (isMusicPlaying) {
+    		            // 如果音乐正在播放，则暂停
+    		            bgMusic1.pause();
+    		            bgMusic2.pause();
+    		            // 切换图标（比如切换成暂停图标）
+    		            musicIcon.innerHTML = '<img src="./原神素材/首页素材/音乐暂停图标.png">';
+    		        } else {
+    		            // 如果音乐暂停，则播放
+    		            bgMusic1.play();
+    		            bgMusic2.play();
+    		            // 切换图标（比如切换成播放图标）
+    		            musicIcon.innerHTML = '<img src="./原神素材/首页素材/音乐图标.png">';
+    		        }
+    		        // 切换音乐播放状态
+    		        isMusicPlaying = !isMusicPlaying;
+    		    }
+    		</script>
+    	</nav>
+    <main>
+        <!-- Wallpaper 1 -->
+        <div class="wallpaper">
+            <img src="./原神素材/图像素材/壁纸1.png">
+        </div>
+        <!-- Wallpaper 2 -->
+        <div class="wallpaper">
+            <img src="./原神素材/图像素材/壁纸2.png">
+        </div>
+		<!-- Wallpaper 3 -->
+		<div class="wallpaper">
+		    <img src="./原神素材/图像素材/壁纸3.png">
+		</div>
+		<!-- Wallpaper 4 -->
+		<div class="wallpaper">
+		    <img src="./原神素材/图像素材/壁纸4.png">
+		</div>
+		<!-- Wallpaper 5 -->
+		<div class="wallpaper">
+		    <img src="./原神素材/图像素材/壁纸5.png">
+		</div>
+		<!-- Wallpaper 6 -->
+		<div class="wallpaper">
+		    <img src="./原神素材/图像素材/壁纸6.png">
+		</div>
+		<!-- Wallpaper 7 -->
+		<div class="wallpaper">
+		    <img src="./原神素材/图像素材/壁纸7.png">
+		</div>
+		<!-- Wallpaper 8 -->
+		<div class="wallpaper">
+		    <img src="./原神素材/图像素材/壁纸8.png">
+		</div>
+		<!-- Wallpaper 9 -->
+		<div class="wallpaper">
+		    <img src="./原神素材/图像素材/壁纸9.png">
+		</div>
+		<!-- Wallpaper 10 -->
+		<div class="wallpaper">
+		    <img src="./原神素材/图像素材/壁纸10.png">
+		</div>
+		<!-- Wallpaper 11 -->
+		<div class="wallpaper">
+		    <img src="./原神素材/图像素材/壁纸11.png">
+		</div>
+		<!-- Wallpaper 12 -->
+		<div class="wallpaper">
+		    <img src="./原神素材/图像素材/壁纸12.png">
+		</div>
+    </main>
+
+</body>
+</html>
