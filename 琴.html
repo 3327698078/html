@@ -1,0 +1,524 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>图片滑动</title>
+		<style>
+			* {
+				margin: 0;
+				padding: 0;
+				list-style: none;
+			}
+			/* 全局盒子 */
+			.content-warp {
+				margin: 0;
+				padding: 0;
+				top: 0;
+				height: 100%;
+				width: 100%;
+				border: 1px solid black;
+				position: relative;
+				visibility: visible;
+			}
+			
+			/* 添加导航栏样式 */
+			nav {
+				display: flex;
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 66px;
+				transition: background-color 0.5s; /* 添加过渡效果 */
+				z-index: 99; /* 设置一个较高的 z-index 以确保导航栏在顶部 */
+				color: white;
+				text-align: center;
+				line-height: 66px;
+				background: #111111BF;
+				margin: 0 auto;
+			}
+			
+			nav ul {
+				list-style: none;
+				display: flex;
+				align-items: center; /* 垂直居中 */
+				margin-left: 30px;
+			}
+			
+			nav li {
+				float: left;
+				height: 66px;
+				width: 66px;
+				text-align: center;
+				margin: 0px 50px;
+			}
+			
+			nav a {
+				text-align: center;
+				color:#fff;
+				font-size: 18px;
+				text-decoration: none; /* 去除下划线 */
+				letter-spacing: 5px; /* 增加字间距 */
+			}
+			
+			nav li:hover {
+				color: #fff;
+				text-shadow: 0 0 10px #69e0ff, 0 0 20px #69e0ff, 0 0 40px #69e0ff;
+			}
+			
+			/* logo顶部左侧 */
+			.logo {
+				float: left;
+				margin-left: 80px;
+				height: 100%;
+				width: 85px;
+				background: transparent url("./原神素材/原神左侧图标.png") no-repeat 0 0;
+				cursor: pointer;
+				background-size: contain;
+				transform: scale(2);
+			}
+			
+			/* 导航样式结束 */
+			/* 导航右侧图标 */
+			.music{
+				transform: translateX(0px);
+				position: fixed;
+				top: 15px;
+				right: 80px;
+				z-index: 9999;
+				cursor: pointer;
+			}
+			/* 角色开始 */
+			.character{
+				position: relative;
+				width: 100%;
+				height: 100vh;
+				overflow: hidden;
+				font-size: 12px;
+			}
+			.character-bg{
+				position: absolute;
+				top: 0;
+				bottom: 0;
+				left: 0;
+				right: 0;
+				background-position: center;
+				background-size: cover;
+				transform-origin: center;
+			}
+			@keyframes breath{
+				0%{
+					transform: scale(1);
+				}
+				50%{
+					transform: scale(1.2);
+				}
+				100%{
+					transform: scale(1);
+				}
+			}
+			@keyframes bg-change{
+				48%{
+					opacity: 0;
+				}
+				50%{
+					opacity: 1;
+				}
+				98%{
+					opacity: 1;
+				}
+				100%{
+					opacity: 0;
+				}
+			}
+			.character-bg1{
+				animation: breath 30s infinite linear;
+				opacity: 1;
+			}
+			.character-bg2{
+				animation: bg-change 15s infinite linear, breath 30s infinite linear;
+				opacity: 0;
+			}
+			.character-list{
+				position: absolute;
+				z-index: 9;
+				top: 0;
+				left: 0;
+				width: 370px;
+				height: 100%;
+				box-sizing: border-box;
+				padding-top: 187px;
+			}
+			.character-city{
+				width: 100%;
+				height: 54px;
+				line-height: 54px;
+				font-size: 18px;
+				color: #fff;
+				text-shadow: 0 2px 6px rgba(0,0,0,0.2);
+				box-sizing: border-box;
+				padding-left: 56px;
+				background: 18px center no-repeat;
+				background-image: url(./原神素材/角色素材/city背景2.png);
+				background-size: 40px;
+			}
+			.character-active{
+				text-shadow: none;
+				padding-left: 70px;
+				background: left center no-repeat;
+				background-image: url(./原神素材/角色素材/list图标.png);
+				background-size: contain;
+				pointer-events: none;
+			}
+			.character-main{
+				position: relative;
+				width: 100%;
+				height: 100%;
+				background: url(./原神素材/角色素材/阴影背景.png) no-repeat;
+				background-position: center bottom;
+				background-size: auto 100vh;
+			}
+			.character-swiper--con{
+				position: relative;
+				width: 100%;
+				height: 100%;
+				margin-left: auto;
+				margin-right: auto;
+				overflow: hidden;
+				list-style: none;
+				padding: 0;
+				z-index: 1;
+			}
+			.character-warp{
+				position: relative;
+				width: 100%;
+				height: 100%;
+				z-index: 1;
+				display: flex;
+				box-sizing: content-box;
+			}
+			.swiper-warpper{
+				position: relative;
+				height: 100%;
+				opacity: 0 !important;
+			}
+			.character-rw {
+			  opacity: 1;
+			  transform: translateX(0px);
+			  position: absolute;  /* 绝对定位 */
+			  top: 0;
+			  left: calc(50% - 60vh);
+			  width: auto;
+			  height: 100vh;
+			  transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+			  animation-duration: 1s;
+			  animation-fill-mode: both;
+			}
+			.character-icon{
+				left: calc(50% - 50vh);
+				position: absolute;
+				top: 10vh;
+				width: auto;
+				height: 378px;
+				opacity: 0.1;
+			}
+			.character-kj{
+				left: calc(50% - 50vh);
+				position: absolute;
+				z-index: 4;
+				top: 18vh;
+				width: 550px;
+				transition: all 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+				text-align: justify;
+			}
+			.character-kj2{
+				display: flex;
+				width: 100%;
+				min-height: 26px;
+				max-height: 160px;
+				overflow-y: auto;
+				padding: 10px 0 10px 15px;
+				box-sizing: border-box;
+				background: rgba(1,1,1,0.5);
+				font-size: 18px;
+				color: #fff;
+				margin-top: 20px;
+				line-height: 26px;
+				font-family: 宋体;
+			}
+			.character-wzkj{
+				position: relative;
+				overflow: hidden;
+				height: 100%;
+				max-width: 100%;
+				outline: 0;
+				direction: ltr;
+				width: 455px;
+			}
+			.character-tc{
+				position: absolute;
+				top: 42vh;
+				transition: opacity 1s cubic-bezier(0.22, 0.61, 0.36, 1) 0.3s;
+				transform-origin: left center;
+				left: calc(50% - 14px);
+				opacity: 1;
+			}
+			.character-page{      /* 角色底部栏 */
+				display: flex;
+				justify-content: center;
+				position: absolute;
+				z-index: 9;
+				left: 0;
+				bottom: 0;
+				padding-top: 22px;
+				width: 100%;
+				height: 190px;
+				background: rgba(204, 204, 204, 0.2);
+			}
+			.character-page::before{
+				position: absolute;
+				bottom: 0;
+				left: 0;
+				display: block;
+				content: '';
+				width: 100%;
+				height: 156px;
+				background: url(./原神素材/角色素材/page背景.png) center bottom repeat no-repeat;
+			}
+			.page-kj{
+				margin: 0 !important;
+				width: 830px;
+				height: 100%;
+				position: relative;
+				overflow: hidden;
+				list-style: none;
+				padding: 0;
+				z-index: 1;
+			}
+			.page-kj-ul{
+				display: flex;
+				width: 100%;
+				height: 150px;
+				align-items: center;
+				bottom: 10px;
+				left: 0;
+			}
+			.page-kj-li{
+				background-position: 0 -132px;
+				width: 110px !important;
+				height: 132px;
+				background: transparent url(./原神素材/角色素材/pageli背景.png) no-repeat 0 0;
+				font-size: 0;
+				cursor: pointer;
+				margin-left: 34px;
+				flex-shrink: 0;
+				position: relative;
+			}
+			.page-kj-li img{
+				display: block;
+				margin: 2px auto 0;
+				width: 106px;
+				height: 106px;
+			}
+			.page-kj-li p{
+				color: #121212;
+				font-size: 16px;
+				line-height: 22px;
+				text-shadow: 0 2px 6px rgba(0,0,0,0.2);
+				text-align: center;
+			}
+			/* 底部文字logo */
+			.footerCon {
+			    padding: 30px 0;
+			    background: #000;
+			    color: #999;
+			    font-size: 24px;
+			    padding-bottom: 20px;
+			    overflow: auto;
+			    width: 100%;
+			    height: 150px;
+			    background-size: cover;
+			    background-repeat: no-repeat;
+			    background-color: #000;
+				background-image: url(./原神素材/footer素材/foter背景.png);
+			}
+			
+			.footerCon-content {
+			    display: flex;
+			    width: 70%;
+			    margin: 0 auto;
+			    text-align: center;
+			    align-items: center;
+			    margin-top: 45px;
+			}
+			
+			.footer-logo {
+			    flex-direction: column;
+			    justify-content: center;
+			    display: flex;
+			    align-items: center;
+			    box-sizing: border-box;
+			    margin-left: 60px;
+			}
+			
+			.footer-info {
+			    color: #aaa;
+			    flex: 1; /* 设置弹性元素，使其占据剩余空间 */
+			    line-height: 28px;
+			    text-align: center;
+			}
+			
+			.footer-mg1 {
+			    box-sizing: border-box;
+			    margin: 0;
+			    padding: 0;
+			    text-align: center;
+			}
+			
+			.footer-p {
+			    color: #3299CC ;
+			    font-family: 楷体;
+				font-weight: bold;
+			    margin-bottom: 10px; /* 添加底部边距 */
+				margin-right: 240px;
+			}
+		</style>
+	</head>
+	<body style="margin: 0; padding: 0;">
+		<div class="content-warp">
+			<nav>
+				<div class="logo"></div>
+				<ul style="list-style: none;">
+					<li><a href="./index.html" target="_self">首页</a></li>
+					<li><a href="#" target="_self">角色</a></li>
+					<li><a href="./世界.html" target="_self">世界</a></li>
+					<li><a href="./漫画.html">漫画</a></li>
+					<li><a href="./图像.html" target="_self">图像</a></li>
+					<li><a href="https://act.mihoyo.com/ys/event/community-content-collection/index.html?game_biz=hk4e_cn&mhy_presentation_style=fullscreen&mhy_auth_required=true&mhy_hide_status_bar=true&utm_source=gw&utm_medium=ys&utm_campaign=sns#/home" target="_blank">社区</a></li>
+				</ul>
+					<!-- 背景音乐 -->
+					<div class="music" id="musicIcon" onclick="toggleMusic()">
+					    <!-- 初始状态为暂停图标 -->
+					    <img src="./原神素材/首页素材/音乐暂停图标.png">
+					</div>
+					
+					<audio id="bgMusic1" loop>
+					    <source src="./原神素材/首页素材/背景音乐.mp3" type="audio/mp3">
+					    你的设备不支持播放音乐
+					</audio>
+					
+					<audio id="bgMusic2" loop>
+					    <source src="./原神素材/首页素材/风和海浪.mp3" type="audio/mp3">
+					    你的设备不支持播放音乐
+					</audio>
+					
+					<script>
+					    var bgMusic1 = document.getElementById('bgMusic1');
+					    var bgMusic2 = document.getElementById('bgMusic2');
+					    var musicIcon = document.getElementById('musicIcon');
+					    var isMusicPlaying = !bgMusic1.paused;  // 初始状态为音乐是否正在播放
+					
+					    // 初始状态，设置图标
+					    if (isMusicPlaying) {
+					        musicIcon.innerHTML = '<img src="./原神素材/首页素材/音乐图标.png">';
+					    }
+					
+					    function toggleMusic() {
+					        if (isMusicPlaying) {
+					            // 如果音乐正在播放，则暂停
+					            bgMusic1.pause();
+					            bgMusic2.pause();
+					            // 切换图标（比如切换成暂停图标）
+					            musicIcon.innerHTML = '<img src="./原神素材/首页素材/音乐暂停图标.png">';
+					        } else {
+					            // 如果音乐暂停，则播放
+					            bgMusic1.play();
+					            bgMusic2.play();
+					            // 切换图标（比如切换成播放图标）
+					            musicIcon.innerHTML = '<img src="./原神素材/首页素材/音乐图标.png">';
+					        }
+					        // 切换音乐播放状态
+					        isMusicPlaying = !isMusicPlaying;
+					    }
+					</script>
+
+				</ul>
+			</nav>
+			<!-- 角色开始 -->
+			<!-- 左边列表项目 -->
+			<div class="character">
+				<div class="character-bg character-bg1" style="background-image: url(./原神素材/角色素材/蒙德模糊.jpg);"></div>
+				<div class="character-bg character-bg2" style="background-image: url(./原神素材/角色素材/蒙德模糊2.jpg);"></div>
+				<ul class="character-list">
+					<li class="character-city character-active">蒙德城</li>
+					<li class="character-city ">璃月港</li>
+					<li class="character-city ">稻妻城</li>
+					<li class="character-city ">须弥城</li>
+					<li class="character-city ">枫丹延</li>
+				</ul>
+				<div class="character-main">
+					<div class="character-swiper--con" style="opacity: 1;">
+					    <ul class="character-warp" style="transition-duration: 0ms;">
+					    	<li class="swiper-slide" style="width: 2500px; opacity: 1; transform: translate3d(0px,0px,0px); transition-duration: 0ms;">
+					    		<img src="./原神素材/角色素材/琴.png" class="character-rw" draggable="false">
+								<img src="./原神素材/角色素材/风元素.png" draggable="false" class="character-icon">
+								<div class="character-kj" style="opacity: 1;transform: translate3d(0px,0px,0px); transition-duration: 0ms;">
+									<img src="./原神素材/角色素材/琴名字.png">
+									<div class="character-kj2">
+										<div class="character-wzkj" style="max-height: none;">
+											<div class="wzkj">
+												<p>
+													身为西风骑士团的代理团长，琴一直忠于职守，为人们带来安宁。虽然并非天赋异禀，但通过刻苦训练，如今的她已然能够独当一面。<br>
+													当风魔龙的威胁开始临近，这位可靠的代理团长早已做好了准备，誓要守护蒙德。
+												</p>
+											</div>
+										</div>
+									</div>
+									<img src="./原神素材/角色素材/琴文字.png" class="character-tc">
+								</div>
+							</li>
+					    </ul>
+					<div class="character-page">
+						<div class="page-kj">
+							<ul class="page-kj-ul" style="transform: translate3d(0px,0px,0px);">
+								<li class="page-kj-li">
+									<a href="#">
+										<img src="./原神素材/角色素材/page琴.png">
+										<p style="color: #fff;">琴</p>
+									</a>
+								</li>
+								<li class="page-kj-li">
+									<a href="./安柏.html">
+										<img src="./原神素材/角色素材/page安柏.png">
+										<p style="color: #fff;">安柏</p>
+									</a>
+								</li>
+								<li class="page-kj-li">
+									<a href="./温迪.html">
+										<img src="./原神素材/角色素材/page温迪.png">
+										<p style="color: #fff;">温迪</p>
+									</a>
+								</li>
+								<li class="page-kj-li">
+									<a href="./可莉.html">
+										<img src="./原神素材/角色素材/page可莉.png">
+										<p style="color: #fff;">可莉</p>
+									</a>
+								</li>
+								<li class="page-kj-li">
+									<a href="./迪卢克.html">
+										<img src="./原神素材/角色素材/page迪卢克.png">
+										<p style="color: #fff;">迪卢克</p>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+        </div>
+		
+		
+    </body>
+</html>
